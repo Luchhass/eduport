@@ -1,32 +1,71 @@
-"use client";
+import { Geist_Mono, Inter } from "next/font/google";
 
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-import { usePathname } from "next/navigation";
+import AppShell from "@/components/AppShell";
+import { siteConfig } from "@/lib/metadata";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const interSans = Inter({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
+export const metadata = {
+  metadataBase: new URL(siteConfig.url),
+  applicationName: siteConfig.name,
+  title: {
+    default: `${siteConfig.name} | Eğitim Takip Platformu`,
+    template: `${siteConfig.name} | %s`,
+  },
+  description: siteConfig.description,
+  keywords: [
+    "Eduport",
+    "YKS takip",
+    "öğrenci paneli",
+    "öğretmen paneli",
+    "okul yönetimi",
+    "eğitim analitiği",
+  ],
+  authors: [{ name: siteConfig.name }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/icon.svg",
+  },
+  openGraph: {
+    type: "website",
+    locale: "tr_TR",
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    title: `${siteConfig.name} | Eğitim Takip Platformu`,
+    description: siteConfig.description,
+  },
+  twitter: {
+    card: "summary",
+    title: `${siteConfig.name} | Eğitim Takip Platformu`,
+    description: siteConfig.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
 export default function RootLayout({ children }) {
-  const pathname = usePathname();
-  const isHiddenPage = pathname === "/" || pathname === "/login";
-
   return (
-    <html lang="en">
+    <html lang="tr" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex`}
+        className={`${interSans.variable} ${geistMono.variable} flex min-h-screen overflow-x-hidden antialiased`}
       >
-        {!isHiddenPage && <Sidebar />}
-
-        <div
-          className={`flex flex-col flex-1 min-h-screen bg-[#F0F2F5] transition-all duration-300 ${!isHiddenPage ? "lg:ml-64" : "ml-0"}`}
-        >
-          <main className="flex-1">{children}</main>
-        </div>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

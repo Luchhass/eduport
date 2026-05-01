@@ -1,116 +1,133 @@
 "use client";
 
-import React, { useState } from "react";
-import { Trash2, Save, BookOpen, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { BookOpen, ChevronDown, Save, Trash2 } from "lucide-react";
 
-export default function EducatorDashboard() {
-  const [selectedCourse, setSelectedCourse] = useState("Matematik");
+const initialRows = [
+  { id: 1, name: "Caner Vural", net: 32, success: 85, trend: "+2.1" },
+  { id: 2, name: "Zeynep Koç", net: 28, success: 75, trend: "+0.5" },
+  { id: 3, name: "Mert Demir", net: 15, success: 40, trend: "-1.2" },
+  { id: 4, name: "Ayşe Yılmaz", net: 25, success: 68, trend: "+1.0" },
+  { id: 5, name: "Kerem Aksoy", net: 38, success: 95, trend: "+0.8" },
+];
 
-  // Örnek Veri Seti - Sınıf Performans Verileri
-  const [performanceData, setPerformanceData] = useState([
-    { id: 1, name: "Caner Vural", net: 32, basari: 85, trend: "+2.1" },
-    { id: 2, name: "Zeynep Koç", net: 28, basari: 75, trend: "+0.5" },
-    { id: 3, name: "Mert Demir", net: 15, basari: 40, trend: "-1.2" },
-    { id: 4, name: "Ayşe Yılmaz", net: 25, basari: 68, trend: "+1.0" },
-    { id: 5, name: "Kerem Aksoy", net: 38, basari: 95, trend: "+0.8" },
-    { id: 6, name: "Deniz Yıldız", net: 20, basari: 55, trend: "-0.5" },
-  ]);
-
-  const deleteRow = (id) =>
-    setPerformanceData(performanceData.filter((row) => row.id !== id));
+export default function GradingPage() {
+  const [course, setCourse] = useState("Matematik");
+  const [rows, setRows] = useState(initialRows);
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8">
-      {/* Ders Seçim Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-4xl border border-slate-100 shadow-sm">
-        <div>
-          <h1 className="text-2xl font-black text-slate-800">
-            Ders Performans Yönetimi
-          </h1>
-          <p className="text-slate-400 font-medium text-sm">
-            Tüm sınıfın notlarını tek bir panelden düzenle.
-          </p>
-        </div>
-        <div className="relative">
-          <select
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-            className="appearance-none bg-slate-50 font-bold p-4 pr-10 rounded-2xl border border-slate-200 outline-none focus:ring-2 focus:ring-[#7A40F2] cursor-pointer"
-          >
-            <option>Matematik</option>
-            <option>Türkçe</option>
-            <option>Fizik</option>
-            <option>Kimya</option>
-          </select>
-          <ChevronRight
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none rotate-90"
-            size={16}
-          />
-        </div>
-      </div>
+    <div className="app-page">
+      <div className="dense-stack">
+        <section className="widget widget-pad">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="page-kicker">Notlar</p>
+              <h1 className="page-title mt-2">Sınav sonuç işlemleri</h1>
+              <p className="page-subtitle mt-3">
+                Ders seç, netleri düzenle ve sınıf başarısını hızlıca takip et.
+              </p>
+            </div>
+            <label className="relative w-full sm:w-64">
+              <select
+                value={course}
+                onChange={(event) => setCourse(event.target.value)}
+                className="input-field appearance-none px-4 pr-10"
+              >
+                <option>Matematik</option>
+                <option>Türkçe</option>
+                <option>Fizik</option>
+                <option>Kimya</option>
+              </select>
+              <ChevronDown
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                size={17}
+              />
+            </label>
+          </div>
+        </section>
 
-      {/* Analitik Tablo */}
-      <div className="bg-white rounded-4xl border border-slate-100 p-8 shadow-sm">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="font-black text-xl text-slate-800 flex items-center gap-2">
-            <BookOpen className="text-[#7A40F2]" /> {selectedCourse} - Sınıf Not
-            Tablosu
-          </h2>
-          <span className="text-xs font-black text-slate-400 uppercase tracking-widest bg-slate-50 px-4 py-2 rounded-lg">
-            {performanceData.length} ÖĞRENCİ LİSTELENDİ
-          </span>
-        </div>
+        <section className="grid gap-3 xl:grid-cols-[1fr_0.35fr]">
+          <div className="widget widget-pad">
+            <div className="mb-4 flex items-center justify-between">
+              <p className="widget-title flex items-center gap-2">
+                <BookOpen className="text-[#9F58FF]" size={22} /> {course} tablosu
+              </p>
+              <span className="pill soft-pill">{rows.length} öğrenci</span>
+            </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="text-left text-[10px] uppercase font-black text-slate-400 tracking-widest border-b border-slate-100">
-                <th className="pb-4">Öğrenci Adı</th>
-                <th className="pb-4">Net Sayısı</th>
-                <th className="pb-4">Başarı %</th>
-                <th className="pb-4">Trend</th>
-                <th className="pb-4 text-center">İşlemler</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-50">
-              {performanceData.map((row) => (
-                <tr key={row.id} className="text-sm">
-                  <td className="py-5 font-bold text-slate-800">{row.name}</td>
-                  <td className="py-5">
-                    <input
-                      type="number"
-                      defaultValue={row.net}
-                      className="w-20 p-2 bg-slate-50 rounded-lg border border-slate-200 font-bold text-center focus:border-[#7A40F2] outline-none"
-                    />
-                  </td>
-                  <td className="py-5 font-bold text-[#7A40F2]">
-                    %{row.basari}
-                  </td>
-                  <td
-                    className={`py-5 font-bold ${row.trend.startsWith("+") ? "text-emerald-500" : "text-red-500"}`}
-                  >
-                    {row.trend}
-                  </td>
-                  <td className="py-5 text-center">
-                    <button
-                      onClick={() => deleteRow(row.id)}
-                      className="text-red-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </td>
-                </tr>
+            <div className="table-scroll">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Öğrenci</th>
+                    <th>Net</th>
+                    <th>Başarı</th>
+                    <th>Trend</th>
+                    <th>İşlem</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row) => (
+                    <tr key={row.id}>
+                      <td>{row.name}</td>
+                      <td>
+                        <input
+                          type="number"
+                          defaultValue={row.net}
+                          className="w-20 rounded-full border border-purple-100 bg-white px-3 py-2 text-center font-black outline-none focus:border-[#9F58FF]"
+                        />
+                      </td>
+                      <td className="font-black text-[#7A40F2]">
+                        %{row.success}
+                      </td>
+                      <td
+                        className={
+                          row.trend.startsWith("+")
+                            ? "font-black text-emerald-500"
+                            : "font-black text-red-500"
+                        }
+                      >
+                        {row.trend}
+                      </td>
+                      <td>
+                        <button
+                          onClick={() =>
+                            setRows((prev) =>
+                              prev.filter((item) => item.id !== row.id),
+                            )
+                          }
+                          className="icon-button icon-button-white"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <aside className="widget-brand widget-pad">
+            <p className="text-5xl font-black">72.4</p>
+            <p className="mt-2 text-sm font-bold text-purple-100">
+              Sınıf ortalaması
+            </p>
+            <div className="mt-5 grid gap-2">
+              {["En yüksek: 95", "Riskli: 2", "Eksik giriş: 0"].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl bg-white/15 p-3 text-sm font-black"
+                >
+                  {item}
+                </div>
               ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Kaydet Butonu */}
-        <div className="mt-8 flex justify-end">
-          <button className="flex items-center gap-2 bg-[#7A40F2] text-white px-8 py-4 rounded-2xl font-bold hover:bg-[#6533cc] shadow-lg shadow-purple-200 transition-all">
-            <Save size={18} /> Tüm Değişiklikleri Kaydet
-          </button>
-        </div>
+            </div>
+            <button className="mt-5 w-full rounded-full bg-white py-3 text-sm font-black text-[#7A40F2]">
+              <Save className="mr-2 inline" size={16} /> Kaydet
+            </button>
+          </aside>
+        </section>
       </div>
     </div>
   );

@@ -1,214 +1,190 @@
 "use client";
 
-import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard,
-  Users,
-  LineChart,
-  LogOut,
-  Menu,
-  X,
-  BrainCircuit,
+  BarChart3,
   BookOpenCheck,
-  Database,
+  BrainCircuit,
+  Building2,
+  ClipboardCheck,
+  GraduationCap,
+  LayoutDashboard,
+  MessageCircle,
+  School,
   Trophy,
+  UserPlus,
+  Users,
 } from "lucide-react";
 
-// Hook importu
 import { useRole } from "@/hooks/useRole";
+
+export const roleData = {
+  student: {
+    label: "Öğrenci",
+    title: "Can Yılmaz",
+    subtitle: "YKS hazırlık",
+    icon: GraduationCap,
+    progress: 74,
+  },
+  educator: {
+    label: "Öğretmen",
+    title: "Ece Karaca",
+    subtitle: "Matematik",
+    icon: BrainCircuit,
+    progress: 68,
+  },
+  institution: {
+    label: "Okul",
+    title: "Kuzey Akademi",
+    subtitle: "Kurumsal",
+    icon: Building2,
+    progress: 82,
+  },
+};
+
+export function getMenu(role) {
+  const base = [
+    { label: "Panel", path: "/dashboard", icon: LayoutDashboard },
+  ];
+
+  if (role === "student") {
+    return [
+      ...base,
+      { label: "Ödevler", path: "/exams", icon: BookOpenCheck },
+      { label: "Analiz", path: "/analysis", icon: BarChart3 },
+      { label: "Sınıf", path: "/leaderboard", icon: Trophy },
+      { label: "İletişim", path: "/support", icon: MessageCircle },
+    ];
+  }
+
+  if (role === "institution") {
+    return [
+      ...base,
+      { label: "Öğretmen", path: "/teachers", icon: UserPlus },
+      { label: "Sınıflar", path: "/classes", icon: School },
+      { label: "Kişiler", path: "/students", icon: Users },
+      { label: "Rapor", path: "/analysis", icon: BarChart3 },
+      { label: "İletişim", path: "/support", icon: MessageCircle },
+    ];
+  }
+
+  return [
+    ...base,
+    { label: "Ödevler", path: "/exams", icon: BookOpenCheck },
+    { label: "Öğrenciler", path: "/students", icon: Users },
+    { label: "Analiz", path: "/analysis", icon: BarChart3 },
+    { label: "Notlar", path: "/grading", icon: ClipboardCheck },
+    { label: "İletişim", path: "/support", icon: MessageCircle },
+  ];
+}
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const router = useRouter();
-  const role = useRole(); // Hook ile dinamik rol çekimi
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const role = useRole();
 
-  // Rol henüz yüklenmediyse boş render
   if (!role) return null;
 
-  const getMenuItems = (role) => {
-    const commonItems = [
-      {
-        label: "Akademik Panel",
-        path: "/dashboard",
-        icon: <LayoutDashboard size={22} />,
-        desc: "Genel Özet",
-      },
-    ];
-
-    if (role === "student") {
-      return [
-        ...commonItems,
-        {
-          label: "Ödevler",
-          path: "/exams",
-          icon: <BookOpenCheck size={22} />,
-          desc: "Deneme & Sınavlar",
-        },
-        {
-          label: "Gelişim Raporları",
-          path: "/analysis",
-          icon: <LineChart size={22} />,
-          desc: "Kör Uçuşuna Son",
-        },
-        {
-          label: "Liderlik Tablosu",
-          path: "/leaderboard",
-          icon: <Trophy size={22} />,
-          desc: "Sıralama & Rekabet",
-        },
-        {
-          label: "İletişim",
-          path: "/support",
-          icon: <BrainCircuit size={22} />,
-          desc: "Eğitmen Desteği",
-        },
-      ];
-    } else {
-      return [
-        ...commonItems,
-        {
-          label: "Ödevler",
-          path: "/exams",
-          icon: <BookOpenCheck size={22} />,
-          desc: "Müfredat Takibi",
-        },
-        {
-          label: "Öğrenci Listesi",
-          path: "/students",
-          icon: <Users size={22} />,
-          desc: "Öğrenci Portfolyosu",
-        },
-        {
-          label: "Gelişim Raporları",
-          path: "/analysis",
-          icon: <LineChart size={22} />,
-          desc: "Performans Takibi",
-        },
-        {
-          label: "Sınav & Sonuç İşlemleri",
-          path: "/grading",
-          icon: <Database size={22} />,
-          desc: "Not Girişi & Listeleme",
-        },
-        {
-          label: "İletişim",
-          path: "/support",
-          icon: <BrainCircuit size={22} />,
-          desc: "Rehberlik Kanalı",
-        },
-      ];
-    }
-  };
-
-  const menuItems = getMenuItems(role);
-
-  const handleLogout = () => {
-    localStorage.removeItem("app_user_role");
-    router.push("/");
-  };
-
-  const NavContent = ({ mobile = false }) => (
-    <>
-      <div
-        className={`flex items-center gap-3 px-2 ${mobile ? "mb-8" : "mb-10"}`}
-      >
-        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3">
-          <BrainCircuit size={28} className="text-[#7A40F2]" />
-        </div>
-        <div className="flex flex-col">
-          <span className="text-xl font-black tracking-tighter text-white">
-            YKS NETWORK
-          </span>
-          <span className="text-[10px] font-bold text-purple-200 uppercase tracking-[0.2em]">
-            {role === "student" ? "ÖĞRENCİ PANELİ" : "EĞİTMEN PANELİ"}
-          </span>
-        </div>
-      </div>
-
-      <nav className="flex flex-col gap-2 flex-1">
-        {menuItems.map((item, i) => {
-          const isActive = pathname.startsWith(item.path);
-          return (
-            <Link
-              key={i}
-              href={item.path}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`group flex items-center gap-4 p-4 rounded-[1.8rem] transition-all duration-300 ${isActive ? "bg-white text-[#7A40F2] shadow-xl scale-[1.02]" : "text-purple-100 hover:bg-white/10"}`}
-            >
-              <div className={isActive ? "text-[#7A40F2]" : "text-purple-300"}>
-                {item.icon}
-              </div>
-              <div className="flex flex-col text-left">
-                <span className="font-bold text-sm">{item.label}</span>
-                <span
-                  className={`text-[9px] font-medium opacity-70 ${isActive ? "text-purple-400" : "text-purple-200"}`}
-                >
-                  {item.desc}
-                </span>
-              </div>
-            </Link>
-          );
-        })}
-      </nav>
-
-      <div className="mt-auto pt-6 flex flex-col gap-4">
-        <div className="bg-white/10 p-5 rounded-[1.8rem] border border-white/5">
-          <span className="text-[10px] font-bold text-purple-200 uppercase mb-2 block">
-            {role === "student" ? "ÖDEV TAMAMLAMA" : "ÖDEV TAMAMLAMA ORANI"}
-          </span>
-          <div className="flex justify-between items-end">
-            <div className="text-2xl font-black text-white">
-              {role === "student" ? "74%" : "88%"}
-            </div>
-            <span className="text-[10px] font-bold text-purple-300 mb-1">
-              {role === "student" ? "Hedefe yakın" : "Sınıf Ortalaması"}
-            </span>
-          </div>
-          <div className="w-full h-1.5 bg-purple-900/30 rounded-full mt-3 overflow-hidden">
-            <div
-              className={`h-full ${role === "student" ? "bg-amber-400" : "bg-emerald-400"}`}
-              style={{ width: role === "student" ? "74%" : "88%" }}
-            />
-          </div>
-        </div>
-
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 text-purple-200 hover:text-white p-2 text-xs font-bold uppercase tracking-widest cursor-pointer w-full"
-        >
-          <LogOut size={16} /> <span>Çıkış Yap</span>
-        </button>
-      </div>
-    </>
-  );
+  const meta = roleData[role] || roleData.student;
+  const RoleIcon = meta.icon;
+  const menu = getMenu(role);
 
   return (
-    <>
-      <div className="hidden lg:flex h-screen p-6 fixed top-0 left-0 z-50 w-80">
-        <aside className="w-full bg-[#7A40F2] p-8 text-white flex flex-col rounded-[2.5rem] shadow-2xl shadow-purple-500/20 h-full">
-          <NavContent />
-        </aside>
-      </div>
+    <aside className="fixed left-0 top-0 z-50 hidden h-dvh w-[var(--sidebar-desktop)] p-[var(--shell-gap)] lg:block">
+      <div className="flex h-full flex-col overflow-hidden rounded-[1.45rem] border border-white/70 bg-white/72 p-2 shadow-xl shadow-purple-200/30 backdrop-blur-xl dark:border-white/10 dark:bg-[#1b1623]/95 dark:shadow-black/20 lg:rounded-[1.75rem] lg:p-3">
+        <Link
+          href="/dashboard"
+          className="mb-3 flex items-center justify-center gap-3 rounded-[1.15rem] bg-[#9F58FF] p-2.5 text-white shadow-lg shadow-purple-300/25 dark:shadow-purple-950/20 lg:justify-start lg:px-3"
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-[#7A40F2]">
+            <RoleIcon size={20} />
+          </span>
+          <span className="hidden min-w-0 lg:block">
+            <span className="block truncate text-sm font-black">YKS NETWORK</span>
+            <span className="block truncate text-[10px] font-bold text-purple-100">
+              {meta.label} alanı
+            </span>
+          </span>
+        </Link>
 
-      <div className="lg:hidden fixed top-0 left-0 w-full z-100 p-4">
-        <div className="bg-[#7A40F2] rounded-3xl p-4 flex justify-between items-center shadow-xl border border-white/10">
-          <span className="font-black text-white ml-2">YKS NETWORK</span>
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 bg-white/10 rounded-xl text-white"
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 bg-[#7A40F2] z-[-1] p-6 pt-28 flex flex-col">
-            <NavContent mobile={true} />
+        <nav className="grid gap-1.5">
+          {menu.map((item) => {
+            const Icon = item.icon;
+            const active =
+              pathname === item.path ||
+              (item.path === "/dashboard" && pathname.startsWith("/dashboard")) ||
+              (item.path !== "/dashboard" && pathname.startsWith(item.path));
+
+            return (
+              <Link
+                key={item.path}
+                href={item.path}
+                title={item.label}
+                className={`flex h-11 items-center justify-center gap-3 rounded-2xl text-sm font-black transition-all lg:justify-start lg:px-3 ${
+                  active
+                    ? "bg-[#9F58FF] text-white shadow-lg shadow-purple-200/70 dark:shadow-purple-950/25"
+                    : "text-zinc-500 hover:bg-white hover:text-[#7A40F2] dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-white"
+                }`}
+              >
+                <Icon size={19} />
+                <span className="hidden lg:block">{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="mt-auto grid gap-2">
+          <div className="hidden rounded-2xl bg-[#f2e7ff] p-3 dark:bg-[#2a2336] lg:block">
+            <div className="mb-2 flex items-center justify-between">
+              <p className="text-[10px] font-black uppercase tracking-wide text-zinc-500 dark:text-zinc-300">
+                Haftalık akış
+              </p>
+              <span className="rounded-full bg-white px-2.5 py-1 text-xs font-black text-[#7A40F2] dark:bg-white/10 dark:text-white">
+                {meta.progress}%
+              </span>
+            </div>
+            <div className="h-2 rounded-full bg-white/80 dark:bg-white/10">
+              <div
+                className="h-full rounded-full bg-[#9F58FF]"
+                style={{ width: `${meta.progress}%` }}
+              />
+            </div>
+            <p className="mt-3 text-xs font-semibold leading-relaxed text-zinc-500 dark:text-zinc-300">
+              Hedefler, ödevler ve bildirimler buradan yönetilir.
+            </p>
           </div>
-        )}
+
+          <Link
+            href="/profile"
+            className="flex items-center justify-center gap-2 rounded-2xl bg-white/78 p-1.5 dark:bg-[#2a2336] lg:justify-start lg:p-2"
+          >
+            <div className="hidden min-w-0 items-center gap-2 lg:flex">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#9F58FF] text-xs font-black text-white">
+                {meta.title
+                  .split(" ")
+                  .map((word) => word[0])
+                  .slice(0, 2)
+                  .join("")}
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-xs font-black text-zinc-800">
+                  {meta.title}
+                </p>
+                <p className="truncate text-[10px] font-bold text-zinc-400">
+                  {meta.subtitle}
+                </p>
+              </div>
+            </div>
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#9F58FF] text-xs font-black text-white lg:hidden">
+              {meta.title
+                .split(" ")
+                .map((word) => word[0])
+                .slice(0, 2)
+                .join("")}
+            </div>
+          </Link>
+        </div>
       </div>
-    </>
+    </aside>
   );
 }

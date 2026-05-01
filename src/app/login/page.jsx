@@ -1,153 +1,253 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
+  ArrowLeft,
+  ArrowRight,
+  BarChart3,
+  BrainCircuit,
+  Building2,
   GraduationCap,
   Lock,
   Mail,
-  UserCircle,
-  Users,
   ShieldCheck,
-  TrendingUp,
-  UserPlus,
+  UserRound,
+  Users,
 } from "lucide-react";
+
+const roles = [
+  {
+    id: "student",
+    label: "Öğrenci",
+    title: "Hedef ve ödev paneli",
+    icon: GraduationCap,
+  },
+  {
+    id: "educator",
+    label: "Öğretmen",
+    title: "Sınıf operasyonu",
+    icon: UserRound,
+  },
+  {
+    id: "institution",
+    label: "Okul",
+    title: "Kurumsal kontrol",
+    icon: Building2,
+  },
+];
+
+const dummyCredentials = {
+  student: {
+    email: "ogrenci@yksnetwork.test",
+    password: "demo1234",
+  },
+  educator: {
+    email: "ogretmen@yksnetwork.test",
+    password: "demo1234",
+  },
+  institution: {
+    email: "okul@yksnetwork.test",
+    password: "demo1234",
+    accessCode: "OKUL-DEMO",
+  },
+};
 
 export default function LoginPage() {
   const router = useRouter();
   const [role, setRole] = useState("student");
   const [isRegister, setIsRegister] = useState(false);
+  const credentials = dummyCredentials[role];
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    // 1. İstemci tarafı için localStorage
+  const handleLogin = (event) => {
+    event.preventDefault();
     localStorage.setItem("app_user_role", role);
-
-    // 2. Sunucu (Middleware) tarafı için Cookie set et
-    // 1 gün süreli, tüm sitede geçerli cookie
     document.cookie = `app_user_role=${role}; path=/; max-age=86400; SameSite=Lax`;
-
-    // 3. Rol değişti eventini tetikle (Hook'ların güncellenmesi için)
     window.dispatchEvent(new Event("storage"));
-
-    // 4. Dashboard'a yönlendir (Middleware araya girip doğru yere atacak)
     router.push("/dashboard");
   };
 
   return (
-    <div className="min-h-screen bg-[#F0F2F9] flex items-center justify-center p-4 relative overflow-hidden font-sans">
-      <div className="absolute top-[-5%] left-[-5%] w-[60%] h-[40%] bg-purple-200/50 rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="relative w-full max-w-112.5 bg-white/80 backdrop-blur-xl border border-white/40 rounded-[2.5rem] shadow-2xl p-8 flex flex-col items-center z-10">
-        <div className="w-16 h-16 bg-[#7A40F2] rounded-2xl flex items-center justify-center shadow-lg mb-6 rotate-3">
-          {isRegister ? (
-            <UserPlus className="text-white w-8 h-8" />
-          ) : (
-            <GraduationCap className="text-white w-8 h-8" />
-          )}
+    <div className="public-shell">
+      <aside className="public-rail">
+        <Link href="/" className="icon-button icon-button-white">
+          <ArrowLeft size={18} />
+        </Link>
+        <div className="grid gap-2">
+          <span className="icon-button icon-button-brand">
+            <BrainCircuit size={18} />
+          </span>
+          <span className="icon-button icon-button-white">
+            <ShieldCheck size={18} />
+          </span>
         </div>
+        <span className="icon-button icon-button-white">
+          <BarChart3 size={18} />
+        </span>
+      </aside>
 
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-black text-zinc-800 tracking-tight">
-            {isRegister ? "Hesap Oluştur" : "YKS NETWORK"}
-          </h1>
-          <p className="text-zinc-500 text-sm mt-2 flex items-center justify-center gap-2">
-            <TrendingUp size={14} className="text-[#7A40F2]" />
-            {isRegister
-              ? "Sınav yolculuğuna ilk adımı at."
-              : "Başarı seni bekliyor."}
-          </p>
-        </div>
+      <main className="public-content flex min-h-screen items-center px-4 py-4 lg:px-6">
+        <div className="mx-auto grid w-full max-w-6xl gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+          <section className="widget-brand widget-pad flex flex-col justify-between">
+            <div>
+              <div className="mb-8 flex items-center justify-between">
+                <Link
+                  href="/"
+                  className="flex items-center gap-3 text-sm font-black text-white"
+                >
+                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-[#7A40F2]">
+                    <BrainCircuit size={22} />
+                  </span>
+                  YKS NETWORK
+                </Link>
+                <Link href="/" className="btn-soft !min-h-10 !bg-white/15 !text-white">
+                  Geri
+                </Link>
+              </div>
 
-        <div className="w-full bg-zinc-100/80 p-1 rounded-2xl flex gap-1 mb-6 border border-zinc-200/50">
-          {[
-            {
-              id: "student",
-              label: "Öğrenci",
-              icon: <GraduationCap size={16} />,
-            },
-            {
-              id: "educator",
-              label: "Eğitimci",
-              icon: <UserCircle size={16} />,
-            },
-            { id: "institution", label: "Kurum", icon: <Users size={16} /> },
-          ].map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => setRole(item.id)}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                role === item.id
-                  ? "bg-white text-[#7A40F2] shadow-sm"
-                  : "text-zinc-400"
-              }`}
-            >
-              {item.icon} {item.label}
-            </button>
-          ))}
-        </div>
-
-        <form className="w-full space-y-4" onSubmit={handleLogin}>
-          <div className="relative group">
-            <Mail
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
-              size={18}
-            />
-            <input
-              type="email"
-              placeholder="E-posta adresi"
-              className="w-full pl-11 py-4 bg-white border border-zinc-100 rounded-2xl outline-none focus:border-[#7A40F2] transition-all text-sm"
-              required
-            />
-          </div>
-
-          <div className="relative group">
-            <Lock
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
-              size={18}
-            />
-            <input
-              type="password"
-              placeholder="Şifre"
-              className="w-full pl-11 py-4 bg-white border border-zinc-100 rounded-2xl outline-none focus:border-[#7A40F2] transition-all text-sm"
-              required
-            />
-          </div>
-
-          {role === "institution" && (
-            <div className="relative animate-in fade-in">
-              <ShieldCheck
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
-                size={18}
-              />
-              <input
-                type="text"
-                placeholder="Kurum Erişim Kodu"
-                className="w-full pl-11 py-4 bg-white border border-indigo-100 rounded-2xl outline-none text-sm"
-                required
-              />
+              <p className="text-4xl font-black leading-tight sm:text-5xl">
+                Rolünü seç, kendi uygulama alanına gir.
+              </p>
+              <p className="mt-5 max-w-md text-sm font-semibold leading-7 text-purple-100">
+                Öğrenci, öğretmen ve okul girişleri ayrı panel düzenleriyle
+                çalışır. Aynı veri dili, farklı iş akışı.
+              </p>
             </div>
-          )}
 
-          <button
-            type="submit"
-            className="w-full bg-[#7A40F2] text-white py-4 rounded-2xl font-bold text-sm shadow-xl hover:bg-[#6635D1] transition-all"
-          >
-            {isRegister ? "Hesabımı Oluştur" : "Sisteme Giriş Yap"}
-          </button>
-        </form>
+            <div className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+              {roles.map((item) => (
+                <div
+                  key={item.id}
+                  className={`rounded-[1.35rem] border p-4 ${
+                    role === item.id
+                      ? "border-white bg-white text-zinc-900"
+                      : "border-white/15 bg-white/10"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`flex h-10 w-10 items-center justify-center rounded-full ${
+                        role === item.id
+                          ? "bg-[#f1e5ff] text-[#7A40F2]"
+                          : "bg-white/15 text-white"
+                      }`}
+                    >
+                      <item.icon size={19} />
+                    </span>
+                    <div>
+                      <p className="font-black">{item.label}</p>
+                      <p
+                        className={`text-xs font-bold ${
+                          role === item.id ? "text-zinc-500" : "text-purple-100"
+                        }`}
+                      >
+                        {item.title}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
 
-        <button
-          onClick={() => setIsRegister(!isRegister)}
-          className="mt-6 text-xs font-bold text-[#7A40F2] hover:underline"
-        >
-          {isRegister
-            ? "Zaten hesabınız var mı? Giriş yapın"
-            : "Hesabınız yok mu? Kayıt olun"}
-        </button>
-      </div>
+          <section className="widget widget-pad">
+            <div className="mb-5">
+              <p className="page-kicker">Giriş</p>
+              <h1 className="mt-2 text-4xl font-black leading-none text-zinc-950">
+                {isRegister ? "Hesap oluştur" : "Panele giriş yap"}
+              </h1>
+              <p className="mt-3 text-sm font-semibold text-zinc-500">
+                Seçtiğin role göre dashboard otomatik açılır.
+              </p>
+            </div>
+
+            <div className="mb-4 grid gap-2 md:grid-cols-3">
+              {roles.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setRole(item.id)}
+                  className={`rounded-[1.25rem] border p-3 text-left transition-all ${
+                    role === item.id
+                      ? "border-purple-200 bg-[#f2e7ff]"
+                      : "border-white bg-white/70 hover:border-purple-100"
+                  }`}
+                >
+                  <item.icon className="mb-3 text-[#9F58FF]" size={22} />
+                  <p className="text-sm font-black text-zinc-900">{item.label}</p>
+                  <p className="mt-1 text-xs font-bold text-zinc-400">
+                    {item.title}
+                  </p>
+                </button>
+              ))}
+            </div>
+
+            <form className="grid gap-3" onSubmit={handleLogin}>
+              <label className="relative">
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                  size={18}
+                />
+                <input
+                  key={`email-${role}`}
+                  type="email"
+                  className="input-field px-4 pl-11"
+                  placeholder="E-posta adresi"
+                  defaultValue={credentials.email}
+                  required
+                />
+              </label>
+
+              <label className="relative">
+                <Lock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                  size={18}
+                />
+                <input
+                  key={`password-${role}`}
+                  type="password"
+                  className="input-field px-4 pl-11"
+                  placeholder="Şifre"
+                  defaultValue={credentials.password}
+                  required
+                />
+              </label>
+
+              {role === "institution" && (
+                <label className="relative">
+                  <Users
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                    size={18}
+                  />
+                  <input
+                    key={`access-${role}`}
+                    className="input-field px-4 pl-11"
+                    placeholder="Okul erişim kodu"
+                    defaultValue={credentials.accessCode}
+                    required
+                  />
+                </label>
+              )}
+
+              <button className="btn-primary mt-1 w-full">
+                {isRegister ? "Hesabı oluştur" : "Giriş yap"}
+                <ArrowRight size={18} />
+              </button>
+            </form>
+
+            <button
+              type="button"
+              onClick={() => setIsRegister(!isRegister)}
+              className="mt-5 rounded-full bg-white px-4 py-3 text-sm font-black text-[#7A40F2]"
+            >
+              {isRegister
+                ? "Zaten hesabın var mı? Giriş yap"
+                : "Hesabın yok mu? Kayıt ol"}
+            </button>
+          </section>
+        </div>
+      </main>
     </div>
   );
 }

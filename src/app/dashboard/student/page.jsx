@@ -1,153 +1,193 @@
 "use client";
 
-import React from "react";
 import {
-  Target,
-  Zap,
-  Clock,
-  Users,
   BarChart3,
+  BookOpenCheck,
   BrainCircuit,
   CalendarDays,
-  TrendingUp,
-  BookOpen,
-  AlertTriangle,
+  CheckCircle2,
+  Clock3,
+  Flame,
+  Target,
+  Trophy,
 } from "lucide-react";
+
+const stats = [
+  { label: "Günlük hedef", value: "78%", sub: "+12 soru", icon: Target },
+  { label: "Odak skoru", value: "92", sub: "yüksek", icon: Flame },
+  { label: "Haftalık süre", value: "42s", sub: "6 gün aktif", icon: Clock3 },
+  { label: "Sıralama", value: "#12", sub: "+3 sıra", icon: Trophy },
+];
+
+const topics = [
+  ["Optik", 42, "Riskli"],
+  ["Türev", 58, "Tekrar"],
+  ["Paragraf", 76, "İyi"],
+  ["Kimya Denge", 64, "Orta"],
+];
 
 export default function StudentDashboard() {
   return (
-    <div className="flex flex-col gap-6 md:gap-8 max-w-7xl mx-auto p-4 md:p-8">
-      {/* Header */}
-      <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-black text-zinc-900">
-            Merhaba, Can! 👋
-          </h1>
-          <p className="text-sm md:text-base text-zinc-500 font-medium">
-            Hedeflerine ulaşmak için bugün harika bir gün.
-          </p>
-        </div>
-        <div className="bg-white px-5 py-3 rounded-2xl shadow-sm border border-zinc-100 flex items-center gap-3">
-          <div className="flex -space-x-3">
-            {[1, 2, 3].map((i) => (
-              <img
-                key={i}
-                src={`https://i.pravatar.cc/100?u=${i}`}
-                className="w-8 h-8 rounded-full border-2 border-white"
-                alt="arkadaş"
-              />
-            ))}
-          </div>
-          <span className="text-[10px] md:text-xs font-black text-zinc-600">
-            142 arkadaşın çalışıyor
-          </span>
-        </div>
-      </header>
-
-      {/* Ana İstatistikler - Responsive Grid */}
-      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-        <div className="bg-[#7A40F2] text-white p-6 md:p-8 rounded-[2.5rem] shadow-lg shadow-purple-200">
-          <Target className="mb-4 opacity-80" size={32} />
-          <h3 className="text-[10px] font-bold opacity-80 uppercase tracking-widest">
-            Günlük Hedef
-          </h3>
-          <p className="text-3xl md:text-4xl font-black mt-2">78%</p>
-          <p className="text-xs text-purple-200 mt-1 font-bold">
-            Daha 1.5 saat lazım!
-          </p>
-        </div>
-        <div className="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-zinc-100">
-          <Zap className="text-amber-500 mb-4" size={32} />
-          <h3 className="text-zinc-400 font-bold text-[10px] uppercase tracking-widest">
-            Odak Skoru
-          </h3>
-          <p className="text-3xl md:text-4xl font-black text-zinc-800 mt-2">
-            92
-          </p>
-          <p className="text-xs text-zinc-400 mt-1 font-bold">
-            Harika konsantrasyon!
-          </p>
-        </div>
-        <div className="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-zinc-100">
-          <Clock className="text-blue-500 mb-4" size={32} />
-          <h3 className="text-zinc-400 font-bold text-[10px] uppercase tracking-widest">
-            Toplam Süre
-          </h3>
-          <p className="text-3xl md:text-4xl font-black text-zinc-800 mt-2">
-            42s
-          </p>
-          <p className="text-xs text-zinc-400 mt-1 font-bold">
-            Bu haftaki verim.
-          </p>
-        </div>
-      </section>
-
-      {/* Analitik Bölüm */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
-        {/* Grafik Bölümü */}
-        <div className="lg:col-span-2 bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-zinc-100">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="font-black text-lg md:text-xl text-zinc-800 flex items-center gap-2">
-              <BarChart3 className="text-purple-600" /> Gelişim Grafiğin
-            </h2>
-            <button className="text-[10px] md:text-xs font-black text-purple-600 bg-purple-50 px-4 py-2 rounded-xl">
-              Detaylı Rapor
-            </button>
-          </div>
-          <div className="h-48 md:h-64 bg-zinc-50 rounded-4xl border border-dashed border-zinc-200 flex items-center justify-center text-zinc-400 font-bold text-xs md:text-sm">
-            [Haftalık Performans Grafiği - Recharts]
-          </div>
-        </div>
-
-        {/* AI ve Planlama */}
-        <div className="flex flex-col gap-6">
-          <div className="bg-zinc-900 text-white p-6 md:p-8 rounded-[2.5rem]">
-            <BrainCircuit className="text-emerald-400 mb-4" size={32} />
-            <h3 className="font-black text-lg">AI Analizi</h3>
-            <p className="text-zinc-400 text-xs md:text-sm mt-2">
-              "Matematik çözme hızın %15 arttı. Bugün TYT denemesi için çok
-              uygunsun!"
-            </p>
-          </div>
-          <div className="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-zinc-100 flex-1">
-            <CalendarDays className="text-rose-500 mb-4" size={32} />
-            <h3 className="font-black text-zinc-800 text-sm">
-              Sınav Geri Sayımı
-            </h3>
-            <p className="text-3xl font-black text-rose-500 mt-2">82 Gün</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Eksik Konu Tamamlama */}
-      <section className="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-zinc-100">
-        <h3 className="font-black text-lg md:text-xl text-zinc-800 mb-6 flex items-center gap-2">
-          <AlertTriangle className="text-amber-500" /> Tamamlaman Gereken
-          Konular
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            { konu: "Türev Limit", risk: "Yüksek", renk: "text-red-500" },
-            { konu: "Optik", risk: "Orta", renk: "text-amber-500" },
-            { konu: "Cümlede Anlam", risk: "Düşük", renk: "text-emerald-500" },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="bg-zinc-50 border border-zinc-100 p-5 rounded-2xl flex justify-between items-center"
-            >
+    <div className="app-page">
+      <div className="dense-stack">
+        <section className="grid gap-3 xl:grid-cols-[1.15fr_0.85fr]">
+          <div className="widget widget-pad">
+            <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="text-sm font-bold text-zinc-800">{item.konu}</p>
-                <p className={`text-[10px] font-bold ${item.renk}`}>
-                  Risk: {item.risk}
+                <p className="page-kicker">Öğrenci paneli</p>
+                <h1 className="page-title mt-2">Bugünkü akademik akış</h1>
+                <p className="page-subtitle mt-3">
+                  Hedef, ödev, eksik konu ve sınıf durumun tek ekranda.
                 </p>
               </div>
-              <button className="bg-white text-[10px] font-bold px-3 py-2 rounded-xl shadow-sm border border-zinc-100">
-                Çalış
-              </button>
+              <span className="pill brand-pill">
+                <CalendarDays size={14} /> 82 gün kaldı
+              </span>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {stats.map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-[1.35rem] bg-white/76 p-4"
+                >
+                  <div className="mb-4 flex items-center justify-between">
+                    <span className="icon-chip">
+                      <item.icon size={18} />
+                    </span>
+                    <span className="text-xs font-black text-emerald-500">
+                      {item.sub}
+                    </span>
+                  </div>
+                  <p className="metric-mid">{item.value}</p>
+                  <p className="mt-2 text-xs font-black text-zinc-500">
+                    {item.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="widget-brand widget-pad">
+            <BrainCircuit size={30} className="mb-5 text-purple-100" />
+            <p className="text-2xl font-black leading-tight">AI çalışma özeti</p>
+            <p className="mt-3 text-sm font-semibold leading-7 text-purple-100">
+              Matematik hızın iyi. Bugün optik tekrarını 25 dakikalık iki blokla
+              toparla, ardından kısa TYT denemesi çöz.
+            </p>
+            <div className="mt-5 grid grid-cols-2 gap-2">
+              <div className="rounded-2xl bg-white/15 p-3">
+                <p className="text-2xl font-black">34</p>
+                <p className="text-xs font-bold text-purple-100">soru kaldı</p>
+              </div>
+              <div className="rounded-2xl bg-white/15 p-3">
+                <p className="text-2xl font-black">2</p>
+                <p className="text-xs font-bold text-purple-100">risk konusu</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="grid gap-3 xl:grid-cols-[0.95fr_1.05fr_0.75fr]">
+          <div className="widget widget-pad">
+            <div className="mb-4 flex items-center justify-between">
+              <p className="widget-title">Ödev akışı</p>
+              <BookOpenCheck className="text-[#9F58FF]" size={22} />
+            </div>
+            <div className="grid gap-2">
+              {[
+                ["TYT Matematik Denemesi", "34/40", 85],
+                ["Fizik Optik Testi", "8/20", 40],
+                ["Paragraf Hız Seti", "18/24", 75],
+              ].map(([title, count, progress]) => (
+                <div key={title} className="rounded-2xl bg-white/76 p-3">
+                  <div className="mb-2 flex items-center justify-between gap-3">
+                    <p className="truncate text-sm font-black text-zinc-800">
+                      {title}
+                    </p>
+                    <span className="text-xs font-black text-[#7A40F2]">
+                      {count}
+                    </span>
+                  </div>
+                  <div className="mini-bar">
+                    <div
+                      className="mini-bar-fill"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="widget widget-pad">
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <p className="widget-title">Haftalık performans</p>
+                <p className="text-xs font-bold text-zinc-400">
+                  Net ve süre dengesi
+                </p>
+              </div>
+              <BarChart3 className="text-[#9F58FF]" size={22} />
+            </div>
+            <div className="flex h-48 items-end gap-2">
+              {[38, 46, 52, 41, 66, 74, 82, 72, 88, 64, 78, 92].map(
+                (height, index) => (
+                  <div
+                    key={index}
+                    className={`flex-1 rounded-t-2xl ${
+                      index === 9 ? "bg-[#9F58FF]" : "bg-[#e8d8ff]"
+                    }`}
+                    style={{ height: `${height}%` }}
+                  />
+                ),
+              )}
+            </div>
+          </div>
+
+          <div className="widget widget-pad">
+            <p className="widget-title mb-4">Konu durumu</p>
+            <div className="grid gap-2">
+              {topics.map(([name, progress, status]) => (
+                <div key={name} className="rounded-2xl bg-white/76 p-3">
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="text-sm font-black text-zinc-800">
+                      {name}
+                    </span>
+                    <span className="text-xs font-black text-zinc-400">
+                      {status}
+                    </span>
+                  </div>
+                  <div className="mini-bar">
+                    <div
+                      className={`h-full rounded-full ${
+                        progress < 55 ? "bg-amber-400" : "bg-[#9F58FF]"
+                      }`}
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="grid gap-3 lg:grid-cols-3">
+          {[
+            ["Bugünün planı", "2 tekrar, 1 deneme, 1 destek sorusu", CheckCircle2],
+            ["Sınıf hedefi", "İlk 10 için 40 XP kaldı", Trophy],
+            ["Yaklaşan deneme", "Cumartesi 10:00 TYT genel", CalendarDays],
+          ].map(([title, text, Icon]) => (
+            <div key={title} className="widget widget-pad">
+              <Icon className="mb-4 text-[#9F58FF]" size={24} />
+              <p className="widget-title">{title}</p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-zinc-500">
+                {text}
+              </p>
             </div>
           ))}
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   );
 }

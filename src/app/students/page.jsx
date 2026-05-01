@@ -1,199 +1,166 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  X,
-  Clock,
-  Target,
-  BookOpen,
-  BarChart3,
-  TrendingUp,
-  Award,
-  Edit3,
-} from "lucide-react";
+import { useState } from "react";
+import { BarChart3, Clock3, Target, UserRound, X } from "lucide-react";
+
+const students = [
+  {
+    id: 1,
+    name: "Ali Yılmaz",
+    className: "12-B",
+    avg: 88,
+    net: 342,
+    hours: 124,
+    trend: "+12",
+  },
+  {
+    id: 2,
+    name: "Ayşe Demir",
+    className: "12-B",
+    avg: 92,
+    net: 385,
+    hours: 145,
+    trend: "+8",
+  },
+  {
+    id: 3,
+    name: "Caner Vural",
+    className: "12-A",
+    avg: 74,
+    net: 290,
+    hours: 98,
+    trend: "-3",
+  },
+  {
+    id: 4,
+    name: "Mert Demir",
+    className: "Mezun",
+    avg: 81,
+    net: 318,
+    hours: 110,
+    trend: "+4",
+  },
+];
 
 export default function StudentsPage() {
-  const [selectedStudent, setSelectedStudent] = useState(null);
-  const [students] = useState([
-    {
-      id: 1,
-      name: "Ali Yılmaz",
-      class: "8-B",
-      avg: "88",
-      totalNet: 342,
-      studyHours: 124,
-      trend: "+12",
-      strength: "Matematik",
-    },
-    {
-      id: 2,
-      name: "Ayşe Demir",
-      class: "8-B",
-      avg: "92",
-      totalNet: 385,
-      studyHours: 145,
-      trend: "+8",
-      strength: "Türkçe",
-    },
-    {
-      id: 3,
-      name: "Caner Vural",
-      class: "8-A",
-      avg: "74",
-      totalNet: 290,
-      studyHours: 98,
-      trend: "-3",
-      strength: "Fizik",
-    },
-  ]);
+  const [selected, setSelected] = useState(null);
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-10">
-      <div>
-        <h1 className="text-3xl font-black text-slate-900">Öğrenciler</h1>
-        <p className="text-slate-500 font-medium">
-          Sınıf genelini kartlar üzerinden takip et.
-        </p>
-      </div>
+    <div className="app-page">
+      <div className="dense-stack">
+        <section className="widget widget-pad">
+          <p className="page-kicker">Kişiler</p>
+          <h1 className="page-title mt-2">Öğrenci portfolyosu</h1>
+          <p className="page-subtitle mt-3">
+            Öğrencileri kompakt kartlar üzerinden takip et, detayları modalda aç.
+          </p>
+        </section>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {students.map((student) => (
-          <div
-            key={student.id}
-            onClick={() => setSelectedStudent(student)}
-            className="bg-white p-6 rounded-4xl border border-slate-100 shadow-sm hover:shadow-xl transition-all cursor-pointer flex flex-col items-center text-center group"
-          >
-            <div className="w-20 h-20 bg-purple-50 text-[#7A40F2] rounded-3xl flex items-center justify-center font-black text-2xl mb-4">
-              {student.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </div>
-            <h3 className="font-black text-lg text-slate-800">
-              {student.name}
-            </h3>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1 mb-6">
-              {student.class}
-            </p>
-            <div className="mt-auto w-full pt-4 border-t border-slate-50 flex justify-between items-center">
-              <span className="text-xs font-bold text-slate-500">
-                Başarı:{" "}
-                <strong className="text-emerald-500">%{student.avg}</strong>
-              </span>
-              <div className="bg-slate-50 p-2 rounded-full group-hover:bg-[#7A40F2] group-hover:text-white">
-                <BookOpen size={16} />
+        <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {students.map((student) => (
+            <button
+              key={student.id}
+              onClick={() => setSelected(student)}
+              className="widget widget-pad text-left transition-transform hover:-translate-y-1"
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#9F58FF] text-lg font-black text-white">
+                  {student.name
+                    .split(" ")
+                    .map((name) => name[0])
+                    .join("")}
+                </span>
+                <span className="pill soft-pill">%{student.avg}</span>
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
+              <p className="font-black text-zinc-900">{student.name}</p>
+              <p className="mt-1 text-xs font-bold text-zinc-400">
+                {student.className}
+              </p>
+              <div className="mt-4 mini-bar">
+                <div
+                  className="mini-bar-fill"
+                  style={{ width: `${student.avg}%` }}
+                />
+              </div>
+            </button>
+          ))}
+        </section>
 
-      {selectedStudent && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-100 flex items-center justify-center p-4">
-          <div className="bg-white rounded-[2.5rem] p-10 w-full max-w-4xl shadow-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-start mb-8">
-              <div>
-                <h2 className="text-4xl font-black text-slate-900">
-                  {selectedStudent.name}
-                </h2>
-                <div className="flex gap-2 mt-2">
-                  <span className="bg-purple-100 text-[#7A40F2] px-4 py-1 rounded-full text-xs font-bold uppercase">
-                    {selectedStudent.class}
-                  </span>
-                  <span className="bg-emerald-50 text-emerald-600 px-4 py-1 rounded-full text-xs font-bold uppercase">
-                    En İyi: {selectedStudent.strength}
-                  </span>
+        {selected && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/35 p-3 backdrop-blur-sm">
+            <div className="widget widget-pad max-h-[92vh] w-full max-w-4xl overflow-y-auto">
+              <div className="mb-4 flex items-start justify-between gap-3">
+                <div>
+                  <p className="page-kicker">Öğrenci detay</p>
+                  <h2 className="mt-2 text-4xl font-black text-zinc-950">
+                    {selected.name}
+                  </h2>
+                  <p className="mt-1 text-sm font-bold text-zinc-500">
+                    {selected.className}
+                  </p>
                 </div>
-              </div>
-              <button
-                onClick={() => setSelectedStudent(null)}
-                className="p-3 bg-slate-50 hover:bg-slate-100 rounded-full"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            {/* Analitik Detaylar */}
-            <div className="grid grid-cols-4 gap-4 mb-8">
-              {[
-                {
-                  label: "Ort. Başarı",
-                  val: "%" + selectedStudent.avg,
-                  icon: BarChart3,
-                },
-                {
-                  label: "Toplam Net",
-                  val: selectedStudent.totalNet,
-                  icon: Target,
-                },
-                {
-                  label: "Çalışma (sa)",
-                  val: selectedStudent.studyHours,
-                  icon: Clock,
-                },
-                {
-                  label: "Trend",
-                  val: selectedStudent.trend,
-                  icon: TrendingUp,
-                },
-              ].map((item, i) => (
-                <div key={i} className="bg-slate-50 p-6 rounded-3xl">
-                  <div className="flex items-center gap-2 text-slate-400 mb-1">
-                    <item.icon size={16} />{" "}
-                    <span className="text-[10px] font-bold uppercase">
-                      {item.label}
-                    </span>
-                  </div>
-                  <div className="text-2xl font-black text-slate-900">
-                    {item.val}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Detay Tablosu ve Not Alanı */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="border border-slate-100 rounded-3xl overflow-hidden">
-                <table className="w-full text-left text-sm">
-                  <thead className="bg-slate-50">
-                    <tr>
-                      <th className="p-4 text-[10px] font-bold uppercase">
-                        Ders
-                      </th>
-                      <th className="p-4 text-[10px] font-bold uppercase">
-                        Net
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {["Matematik", "Fizik", "Türkçe", "Kimya"].map((d, i) => (
-                      <tr key={i} className="border-t border-slate-50">
-                        <td className="p-4 font-bold text-slate-700">{d}</td>
-                        <td className="p-4 font-black text-[#7A40F2]">
-                          85/100
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="bg-slate-900 p-6 rounded-3xl text-white">
-                <h4 className="font-bold mb-4 flex items-center gap-2">
-                  <Edit3 size={16} /> Eğitmen Notu
-                </h4>
-                <textarea
-                  className="w-full h-32 bg-slate-800 rounded-2xl p-4 text-sm focus:outline-none"
-                  placeholder="Bu öğrenci hakkında gözlemlerini yaz..."
-                ></textarea>
-                <button className="w-full mt-4 bg-[#7A40F2] py-3 rounded-xl font-bold">
-                  Notu Kaydet
+                <button
+                  onClick={() => setSelected(null)}
+                  className="icon-button icon-button-white"
+                >
+                  <X size={18} />
                 </button>
               </div>
+
+              <div className="grid gap-3 md:grid-cols-4">
+                {[
+                  ["Başarı", `%${selected.avg}`, BarChart3],
+                  ["Toplam net", selected.net, Target],
+                  ["Çalışma", `${selected.hours}s`, Clock3],
+                  ["Trend", selected.trend, UserRound],
+                ].map(([label, value, Icon]) => (
+                  <div key={label} className="rounded-2xl bg-white/76 p-4">
+                    <Icon className="mb-3 text-[#9F58FF]" size={22} />
+                    <p className="metric-mid">{value}</p>
+                    <p className="mt-1 text-xs font-black text-zinc-400">
+                      {label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-3 grid gap-3 lg:grid-cols-2">
+                <div className="rounded-[1.35rem] bg-white/76 p-4">
+                  <p className="widget-title mb-3">Ders kırılımı</p>
+                  {["Matematik", "Fizik", "Türkçe", "Kimya"].map(
+                    (lesson, index) => (
+                      <div key={lesson} className="mb-3 last:mb-0">
+                        <div className="mb-2 flex justify-between text-sm font-black">
+                          <span>{lesson}</span>
+                          <span className="text-[#7A40F2]">
+                            %{88 - index * 9}
+                          </span>
+                        </div>
+                        <div className="mini-bar">
+                          <div
+                            className="mini-bar-fill"
+                            style={{ width: `${88 - index * 9}%` }}
+                          />
+                        </div>
+                      </div>
+                    ),
+                  )}
+                </div>
+                <div className="rounded-[1.35rem] bg-[#9F58FF] p-4 text-white">
+                  <p className="widget-title !text-white">Eğitmen notu</p>
+                  <textarea
+                    className="mt-3 min-h-36 w-full resize-none rounded-2xl border border-white/15 bg-white/15 p-4 text-sm font-semibold outline-none placeholder:text-purple-100"
+                    placeholder="Gözlem ekle..."
+                  />
+                  <button className="mt-3 w-full rounded-full bg-white py-3 text-sm font-black text-[#7A40F2]">
+                    Notu kaydet
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
